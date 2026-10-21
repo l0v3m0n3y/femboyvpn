@@ -139,7 +139,7 @@ public class femboyVpn {
         let body: [String: Any] = [:]
         let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
         
-        request = try await fetchJSON(
+        let request = try await fetchJSON(
             from: "\(api)/auth/logout",
             method: .post,
             body: bodyData
