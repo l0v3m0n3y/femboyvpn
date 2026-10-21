@@ -185,7 +185,7 @@ public class femboyVpn {
         )
     }
     
-    public func checkOperation() async throws -> Any {
+    public func checkOperation(operationId: String) async throws -> Any {
         return try await fetchJSON(from: "\(api)/operations/\(operationId)")
     }
     
