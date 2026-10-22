@@ -162,17 +162,7 @@ public class femboyVpn {
             body: bodyData
         )
     }
-    
-    public func forgotPassword(email: String) async throws -> Any {
-        let body: [String: Any] = ["email": email]
-        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
-        
-        return try await fetchJSON(
-            from: "\(api)/auth/forgot-password",
-            method: .post,
-            body: bodyData
-        )
-    }
+
 
     public func startPayments(amount: String,method: String) async throws -> Any {
         let body: [String: Any] = ["amount": amount,"method": method]
