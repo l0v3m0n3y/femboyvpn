@@ -163,7 +163,6 @@ public class femboyVpn {
         )
     }
 
-
     public func startPayments(amount: String,method: String) async throws -> Any {
         let body: [String: Any] = ["amount": amount,"method": method]
         let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
@@ -175,12 +174,109 @@ public class femboyVpn {
         )
     }
     
+    public func requestCodeForChangeEmail() async throws -> Any {
+        let body: [String: Any] = [:]
+        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        return try await fetchJSON(
+            from: "\(api)/account/email/change/start",
+            method: .post,
+            body: bodyData
+        )
+    }
+    
+    public func loginByTelegramLink() async throws -> Any {
+        let body: [String: Any] = ["mode": "link"]
+        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        return try await fetchJSON(
+            from: "\(api)/auth/telegram/start",
+            method: .post,
+            body: bodyData
+        )
+    }
+    
+    public func confirmCodeForChangeEmail(id: String, code: String) async throws -> Any {
+        let body: [String: Any] = ["id": id,"code": code]
+        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        return try await fetchJSON(
+            from: "\(api)/account/email/change/confirm",
+            method: .post,
+            body: bodyData
+        )
+    }
+    
+    public func changeEmail(id: String,email: String) async throws -> Any {
+        let body: [String: Any] = ["id": id,"email": email]
+        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        return try await fetchJSON(
+            from: "\(api)/account/email/change/address",
+            method: .post,
+            body: bodyData
+        )
+    }
+
+    public func changePassword(password: String) async throws -> Any {
+        let body: [String: Any] = ["password": password]
+        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        return try await fetchJSON(
+            from: "\(api)/account/password",
+            method: .put,
+            body: bodyData
+        )
+    }
+
+    public func finishTelegramAuth(flow: String) async throws -> Any {
+        let body: [String: Any] = ["flow": flow]
+        let bodyData = try JSONSerialization.data(withJSONObject: body, options: [])
+        
+        let response = try await fetchJSON(
+            from: "\(api)/auth/telegram/finish",
+            method: .post,
+            body: bodyData
+        )
+        
+        if let dict = response as? [String: Any],
+           let token = dict["csrf_token"] as? String {
+            headers["x-csrf-token"] = token
+        }
+
+        return response
+    }
+    
+    public func checkTelegramAuth(flow: String) async throws -> Any {
+        return try await fetchJSON(from: "\(api)/auth/telegram/status?flow=\(flow)")
+    }
+    
     public func checkOperation(operationId: String) async throws -> Any {
         return try await fetchJSON(from: "\(api)/operations/\(operationId)")
     }
     
     public func getPaymentMethods() async throws -> Any {
         return try await fetchJSON(from: "\(api)/me/payment-methods")
+    }
+    
+    public func getMyReferrals() async throws -> Any {
+        return try await fetchJSON(from: "\(api)/me/referrals")
+    }
+    
+    public func getSessionInfo() async throws -> Any {
+        return try await fetchJSON(from: "\(api)/auth/session")
+    }
+
+    public func getAccountInfo() async throws -> Any {
+        return try await fetchJSON(from: "\(api)/account")
+    }
+    
+    public func getMe() async throws -> Any {
+        return try await fetchJSON(from: "\(api)/me")
+    }
+    
+    public func getTransactions() async throws -> Any {
+        return try await fetchJSON(from: "\(api)/me/wallet/transactions")
     }
     
     public func getTarifs() async throws -> Any {
