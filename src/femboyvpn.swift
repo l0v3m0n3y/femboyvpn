@@ -279,6 +279,10 @@ public class femboyVpn {
         return try await fetchJSON(from: "\(api)/me/wallet/transactions")
     }
     
+    public func getNetworkStatus() async throws -> Any {
+        return try await fetchJSON(from: "\(api)/public/network")
+    }
+    
     public func getTarifs() async throws -> Any {
         return try await fetchJSON(from: "\(api)/public/tariffs")
     }
